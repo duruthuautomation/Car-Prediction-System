@@ -78,12 +78,22 @@ def handle_message(data):
 
         CMD = round(e / 1000.0) * 1000
         print(CMD)
+
+        # Save CMD value to another collection in MongoDB
+        cmd_collection = db["cmd_values"]  # Replace "cmd_values" with your desired collection name
+        cmd_collection.replace_one({}, {'cmd_value': CMD}, upsert=True)
+
         emit("data",{'data':data,'id':request.sid},broadcast=True)
         return
     elif len(data) < 1:
         # No data points found
         CMD = "No data found"
         print(CMD)
+
+        # Save CMD value to another collection in MongoDB
+        cmd_collection = db["cmd_values"]  # Replace "cmd_values" with your desired collection name
+        cmd_collection.replace_one({}, {'cmd_value': CMD}, upsert=True)
+        
         emit("data",{'data':[],'id':request.sid},broadcast=True)
         return
 
